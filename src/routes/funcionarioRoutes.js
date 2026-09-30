@@ -8,6 +8,7 @@ router.get('/', controller.list);
 router.post('/', requireAdmin, controller.create);
 router.patch('/:id', requireAdmin, controller.update);
 router.patch('/:id/pin', requireAdmin, controller.resetPin);
+router.post('/:id/pin/alterar', controller.changeOwnPin);
 router.delete('/:id', requireAdmin, controller.remove);
 
 module.exports = router;

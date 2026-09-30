@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const funcionarioModel = require('../models/funcionarioModel');
 
 function isPinValido(pin) {
@@ -48,6 +49,30 @@ async function resetPin(req, res, next) {
   }
 }
 
+// Autoatendimento: o próprio funcionário troca o PIN informando o atual, sem precisar do admin.
+async function changeOwnPin(req, res, next) {
+  try {
+    const { pinAtual, novoPin } = req.body;
+    if (!isPinValido(pinAtual) || !isPinValido(novoPin)) {
+      return res.status(400).json({ error: 'pinAtual e novoPin devem ter 4 dígitos' });
+    }
+
+    const funcionario = await funcionarioModel.findAtivoComPin(req.params.id);
+    if (!funcionario) {
+      return res.status(404).json({ error: 'Funcionário não encontrado' });
+    }
+
+    const valido = await bcrypt.compare(String(pinAtual), funcionario.pin_hash);
+    if (!valido) {
+      return res.status(401).json({ error: 'PIN atual incorreto' });
+    }
+
+    res.json(await funcionarioModel.resetPin(req.params.id, novoPin));
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function remove(req, res, next) {
   try {
     await funcionarioModel.softDelete(req.params.id);
@@ -57,4 +82,4 @@ async function remove(req, res, next) {
   }
 }
 
-module.exports = { list, create, update, resetPin, remove };
+module.exports = { list, create, update, resetPin, changeOwnPin, remove };

@@ -16,6 +16,10 @@ export function resetPinFuncionario(id, pin) {
   return client.patch(`/funcionarios/${id}/pin`, { pin }).then((res) => res.data);
 }
 
+export function changeOwnPin(id, pinAtual, novoPin) {
+  return client.post(`/funcionarios/${id}/pin/alterar`, { pinAtual, novoPin }).then((res) => res.data);
+}
+
 export function deleteFuncionario(id) {
   return client.delete(`/funcionarios/${id}`);
 }

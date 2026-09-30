@@ -57,14 +57,14 @@ export default function AdminLayout() {
             ))}
           </nav>
 
-          <div className="topbar-account">
+          <NavLink to="/admin/alterar-senha" className="topbar-account" title="Alterar senha">
             <span className="avatar-badge">{nomeAdmin?.slice(0, 2).toUpperCase()}</span>
             <div className="account-text">
               <span className="account-name">{nomeAdmin}</span>
               <span className="account-role">Administrador</span>
             </div>
             <ChevronDown size={16} color="var(--text-tertiary)" />
-          </div>
+          </NavLink>
         </header>
 
         <main className="container" style={{ padding: '28px 20px 64px' }}>

@@ -14,6 +14,11 @@ async function findById(id) {
   return rows[0];
 }
 
+async function findCredentialsById(id) {
+  const [rows] = await pool.query('SELECT * FROM administradores WHERE id = ?', [id]);
+  return rows[0];
+}
+
 async function list() {
   const [rows] = await pool.query(
     'SELECT id, nome, email, created_at FROM administradores ORDER BY nome'
@@ -30,4 +35,41 @@ async function create({ nome, email, senha }) {
   return findById(result.insertId);
 }
 
-module.exports = { findByEmail, findById, list, create };
+async function updateSenha(id, senha) {
+  const senhaHash = await bcrypt.hash(senha, 10);
+  await pool.query('UPDATE administradores SET senha_hash = ? WHERE id = ?', [senhaHash, id]);
+}
+
+async function setResetToken(id, tokenHash, expiresAt) {
+  await pool.query(
+    'UPDATE administradores SET reset_token_hash = ?, reset_token_expires = ? WHERE id = ?',
+    [tokenHash, expiresAt, id]
+  );
+}
+
+async function findByResetTokenHash(tokenHash) {
+  const [rows] = await pool.query(
+    'SELECT * FROM administradores WHERE reset_token_hash = ? AND reset_token_expires > NOW()',
+    [tokenHash]
+  );
+  return rows[0];
+}
+
+async function clearResetToken(id) {
+  await pool.query(
+    'UPDATE administradores SET reset_token_hash = NULL, reset_token_expires = NULL WHERE id = ?',
+    [id]
+  );
+}
+
+module.exports = {
+  findByEmail,
+  findById,
+  findCredentialsById,
+  list,
+  create,
+  updateSenha,
+  setResetToken,
+  findByResetTokenHash,
+  clearResetToken,
+};

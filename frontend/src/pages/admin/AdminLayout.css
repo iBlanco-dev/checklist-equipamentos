@@ -148,7 +148,9 @@
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
-  cursor: default;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 }
 
 .avatar-badge {

@@ -63,6 +63,10 @@ export default function AdminLoginPage() {
               {loading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
+
+          <Link to="/esqueci-senha" className="eyebrow" style={{ textDecoration: 'none', display: 'inline-block', marginTop: 16 }}>
+            Esqueci minha senha
+          </Link>
         </div>
       </div>
     </div>

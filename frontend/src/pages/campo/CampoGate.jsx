@@ -1,5 +1,5 @@
 import { NavLink, Outlet, Link } from 'react-router-dom';
-import { ClipboardList, Home, Repeat } from 'lucide-react';
+import { ClipboardList, Home, Repeat, KeyRound } from 'lucide-react';
 import { useFuncionario } from '../../context/FuncionarioContext';
 import SelecionarFuncionarioPage from './SelecionarFuncionarioPage';
 import '../admin/AdminLayout.css';
@@ -36,6 +36,9 @@ export default function CampoGate() {
         <div className="row" style={{ flexShrink: 0 }}>
           <Link to="/" className="btn btn-ghost btn-icon" title="Início">
             <Home size={16} />
+          </Link>
+          <Link to="/campo/alterar-pin" className="btn btn-ghost btn-icon" title="Alterar meu PIN">
+            <KeyRound size={16} />
           </Link>
           <button className="btn btn-ghost btn-icon" onClick={limparFuncionario} title="Trocar funcionário">
             <Repeat size={16} />
