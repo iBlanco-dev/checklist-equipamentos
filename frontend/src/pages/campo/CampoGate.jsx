@@ -1,6 +1,7 @@
 import { NavLink, Outlet, Link } from 'react-router-dom';
-import { ClipboardList, Home, Repeat, KeyRound } from 'lucide-react';
+import { Home, Repeat, KeyRound } from 'lucide-react';
 import { useFuncionario } from '../../context/FuncionarioContext';
+import BrandLogo from '../../components/BrandLogo';
 import SelecionarFuncionarioPage from './SelecionarFuncionarioPage';
 import '../admin/AdminLayout.css';
 
@@ -15,9 +16,7 @@ export default function CampoGate() {
     <div className="shell">
       <header className="topbar" style={{ margin: '16px' }}>
         <div className="topbar-brand">
-          <span className="brand-mark">
-            <ClipboardList size={18} />
-          </span>
+          <BrandLogo simbolo height={36} />
           <div style={{ lineHeight: 1.15 }}>
             <div className="eyebrow">Em campo</div>
             <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>{funcionario.nome}</div>

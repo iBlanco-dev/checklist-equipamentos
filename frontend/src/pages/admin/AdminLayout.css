@@ -110,11 +110,25 @@
   justify-content: center;
 }
 
+.brand-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-strong);
+  margin: 0 4px;
+}
+
 .brand-word {
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 1.05rem;
   letter-spacing: -0.02em;
+}
+
+@media (max-width: 480px) {
+  .brand-divider,
+  .brand-word {
+    display: none;
+  }
 }
 
 .pill-nav {

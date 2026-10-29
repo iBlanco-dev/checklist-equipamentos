@@ -1,7 +1,8 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { Sun, Moon, LayoutGrid, Users, IdCard, Package, LogOut, ClipboardList, ChevronDown, ShieldCheck } from 'lucide-react';
+import { Sun, Moon, LayoutGrid, Users, IdCard, Package, LogOut, ChevronDown, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import BrandLogo from '../../components/BrandLogo';
 import './AdminLayout.css';
 
 const SECTIONS = [
@@ -43,9 +44,8 @@ export default function AdminLayout() {
       <div className="app-main">
         <header className="topbar">
           <div className="topbar-brand">
-            <span className="brand-mark">
-              <ClipboardList size={18} />
-            </span>
+            <BrandLogo height={30} />
+            <span className="brand-divider" />
             <span className="brand-word">Checklist</span>
           </div>
 

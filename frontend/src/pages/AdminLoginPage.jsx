@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { extractErrorMessage } from '../api/client';
+import BrandLogo from '../components/BrandLogo';
 
 export default function AdminLoginPage() {
   const { login } = useAuth();
@@ -31,7 +32,8 @@ export default function AdminLoginPage() {
         <Link to="/" className="eyebrow" style={{ textDecoration: 'none' }}>
           ← voltar
         </Link>
-        <div className="tag-card rise" style={{ marginTop: 16 }}>
+        <BrandLogo height={44} style={{ margin: '24px auto 0' }} />
+        <div className="tag-card rise" style={{ marginTop: 20 }}>
           <span className="eyebrow">Acesso restrito</span>
           <h2 style={{ marginTop: 6, marginBottom: 20 }}>Login Admin</h2>
 

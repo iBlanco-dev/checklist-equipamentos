@@ -1,66 +1,235 @@
+/* Home em tela cheia: moldura escura com painel da marca à esquerda e painel branco de acesso à direita.
+   Cores fixas (não seguem o tema claro/escuro) para manter a identidade da marca. */
 .landing {
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
+  min-height: 100dvh;
+  background: #1f1f1f;
+}
+
+.landing-frame {
+  flex: 1;
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: 8px;
+  padding: 8px;
+  background: #1f1f1f;
+}
+
+/* Painel da marca. Textura: brilho laranja + grade de pontos + ruído granulado. */
+.landing-aside {
   position: relative;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse 60% 50% at 15% 0%, rgba(242, 100, 59, 0.1), transparent 60%),
-    var(--bg-page);
+  isolation: isolate;
+  border-radius: 26px;
+  background-color: #1f1f1f;
+  background-image:
+    radial-gradient(circle at 75% 0%, rgba(236, 103, 7, 0.4), transparent 55%),
+    radial-gradient(circle at 0% 100%, rgba(236, 103, 7, 0.12), transparent 45%),
+    radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.5px);
+  background-size: auto, auto, 22px 22px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 48px 40px 72px;
 }
 
-.landing-inner {
-  position: relative;
-  padding-top: 10vh;
-  padding-bottom: 10vh;
+.landing-aside::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.landing-mark {
+.landing-aside-content {
+  text-align: center;
+  max-width: 340px;
+}
+
+.landing-icon-tile {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 24px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #2e2e2e, #1a1a1a);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing-icon-tile img {
+  height: 46px;
+  width: auto;
+}
+
+.landing-aside h1 {
   color: var(--accent);
-  margin-bottom: 18px;
+  font-size: clamp(2.2rem, 4vw, 3rem);
+}
+
+.landing-aside p {
+  color: #fff;
+  margin-top: 10px;
+  font-size: 0.95rem;
+}
+
+/* Painel branco */
+.landing-main {
+  background: #fff;
+  color: #000;
+  border-radius: 26px;
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-access {
+  flex: 1;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.landing-access-head {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.landing-access-head h2 {
+  color: #000;
+  font-size: 1.6rem;
+}
+
+.landing-access-head p {
+  color: #5c5c5c;
+  margin-top: 6px;
+  font-size: 0.92rem;
 }
 
 .landing-tiles {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 44px;
+  gap: 12px;
 }
 
 .landing-tile {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  gap: 14px;
   text-decoration: none;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 26px 22px;
-  box-shadow: var(--shadow-card);
-  transition: transform 0.15s ease, border-color 0.15s ease;
+  background: #fff;
+  border: 1.5px solid #e6e6e6;
+  border-radius: 16px;
+  padding: 16px 18px;
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .landing-tile:hover {
-  transform: translateY(-3px);
   border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(236, 103, 7, 0.12);
 }
 
-.landing-tile h2 {
-  color: var(--text-primary);
-  font-size: 1.5rem;
-  margin: 2px 0;
+.landing-tile-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #fdf0e6;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.landing-tile p {
-  font-size: 0.88rem;
+.landing-tile-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-.landing-tile-admin .eyebrow {
-  color: var(--text-tertiary);
+.landing-tile-body .eyebrow {
+  color: #9a9a9a;
+  font-size: 0.68rem;
 }
 
-@media (max-width: 640px) {
-  .landing-tiles {
+.landing-tile-body strong {
+  color: #000;
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+}
+
+.landing-tile-body span:last-child {
+  color: #5c5c5c;
+  font-size: 0.84rem;
+}
+
+.landing-tile-arrow {
+  flex-shrink: 0;
+  color: #9a9a9a;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.landing-tile:hover .landing-tile-arrow {
+  color: var(--accent);
+  transform: translateX(3px);
+}
+
+.landing-main-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  color: #5c5c5c;
+}
+
+/* Tablet e celular: painel da marca em cima, mais baixo */
+@media (max-width: 860px) {
+  .landing-frame {
     grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .landing-aside {
+    border-radius: 21px;
+    padding: 40px 24px;
+    align-items: center;
+  }
+
+  .landing-icon-tile {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 18px;
+  }
+
+  .landing-icon-tile img {
+    height: 38px;
+  }
+
+  .landing-main {
+    border-radius: 21px;
+    padding: 24px 20px;
+  }
+
+  .landing-access {
+    padding: 28px 0;
+  }
+
+  .landing-main-footer {
+    justify-content: center;
+    text-align: center;
   }
 }

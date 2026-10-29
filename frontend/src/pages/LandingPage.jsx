@@ -1,32 +1,62 @@
 import { Link } from 'react-router-dom';
+import { Users, ShieldCheck, ArrowRight } from 'lucide-react';
 import './LandingPage.css';
 
 export default function LandingPage() {
   return (
     <div className="landing shell">
-      <div className="container landing-inner">
-        <div className="landing-mark eyebrow rise">Controle de Equipamentos · Social Media</div>
-        <h1 className="rise" style={{ animationDelay: '0.05s' }}>
-          Checklist
-          <br />
-          de Campo
-        </h1>
-        <p className="rise" style={{ animationDelay: '0.1s', maxWidth: 420, marginTop: 10 }}>
-          Registre, acompanhe e finalize a retirada de equipamentos levados para os clientes.
-        </p>
+      <div className="landing-frame rise">
+        {/* Painel escuro com a marca */}
+        <aside className="landing-aside">
+          <div className="landing-aside-content">
+            <span className="landing-icon-tile">
+              <img src="/brand/simbolo-ib-claro.png" alt="Grupo iBlanco" />
+            </span>
+            <h1>Checklist</h1>
+            <p>Registre, acompanhe e finalize a retirada de equipamentos levados para os clientes.</p>
+          </div>
+        </aside>
 
-        <div className="landing-tiles rise" style={{ animationDelay: '0.18s' }}>
-          <Link to="/campo" className="landing-tile">
-            <span className="eyebrow">Equipe</span>
-            <h2>Sou da equipe</h2>
-            <p>Selecione seu nome e monte a comanda em campo.</p>
-          </Link>
-          <Link to="/entrar" className="landing-tile landing-tile-admin">
-            <span className="eyebrow">Gestão</span>
-            <h2>Administrador</h2>
-            <p>Login para gerenciar cadastros e ver o histórico.</p>
-          </Link>
-        </div>
+        {/* Painel branco de acesso */}
+        <section className="landing-main">
+          <div className="landing-access">
+            <div className="landing-access-head">
+              <h2>Bem-vindo ao Checklist</h2>
+              <p>Escolha como deseja acessar o sistema</p>
+            </div>
+
+            <div className="landing-tiles">
+              <Link to="/campo" className="landing-tile">
+                <span className="landing-tile-icon">
+                  <Users size={20} />
+                </span>
+                <span className="landing-tile-body">
+                  <span className="eyebrow">Equipe</span>
+                  <strong>Sou da equipe</strong>
+                  <span>Selecione seu nome e monte a comanda em campo.</span>
+                </span>
+                <ArrowRight size={18} className="landing-tile-arrow" />
+              </Link>
+
+              <Link to="/entrar" className="landing-tile">
+                <span className="landing-tile-icon">
+                  <ShieldCheck size={20} />
+                </span>
+                <span className="landing-tile-body">
+                  <span className="eyebrow">Gestão</span>
+                  <strong>Administrador</strong>
+                  <span>Login para gerenciar cadastros e ver o histórico.</span>
+                </span>
+                <ArrowRight size={18} className="landing-tile-arrow" />
+              </Link>
+            </div>
+          </div>
+
+          <footer className="landing-main-footer">
+            <span>© {new Date().getFullYear()} Grupo iBlanco</span>
+            <span>Controle de Equipamentos · Social Media</span>
+          </footer>
+        </section>
       </div>
     </div>
   );
