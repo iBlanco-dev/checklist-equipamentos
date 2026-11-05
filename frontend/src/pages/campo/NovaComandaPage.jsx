@@ -17,7 +17,7 @@ export default function NovaComandaPage() {
   const [clientes, setClientes] = useState(null);
   const [itens, setItens] = useState(null);
   const [idCliente, setIdCliente] = useState('');
-  const [selecionados, setSelecionados] = useState([]);
+  const [selecionados, setSelecionados] = useState({}); // { [id_item]: quantidade }
   const [erro, setErro] = useState(null);
 
   const [mostrarNovoItem, setMostrarNovoItem] = useState(false);
@@ -37,9 +37,14 @@ export default function NovaComandaPage() {
     carregarItens().catch((e) => setErro(extractErrorMessage(e)));
   }, []);
 
-  const toggleItem = (id) => {
-    setSelecionados((sel) => (sel.includes(id) ? sel.filter((i) => i !== id) : [...sel, id]));
+  const alterarItem = (id, quantidade) => {
+    setSelecionados((sel) => {
+      const { [id]: _, ...resto } = sel;
+      return quantidade > 0 ? { ...resto, [id]: quantidade } : resto;
+    });
   };
+
+  const totalUnidades = Object.values(selecionados).reduce((total, qtd) => total + qtd, 0);
 
   const criarItemRapido = async (e) => {
     e.preventDefault();
@@ -52,7 +57,7 @@ export default function NovaComandaPage() {
       if (fileRef.current) fileRef.current.value = '';
       setMostrarNovoItem(false);
       await carregarItens();
-      setSelecionados((sel) => [...sel, item.id]);
+      alterarItem(item.id, 1);
     } catch (err) {
       setErro(extractErrorMessage(err));
     } finally {
@@ -60,7 +65,7 @@ export default function NovaComandaPage() {
     }
   };
 
-  const podeConfirmar = idCliente && selecionados.length > 0;
+  const podeConfirmar = idCliente && totalUnidades > 0;
 
   const confirmarComPin = async (pin) => {
     setCriandoComanda(true);
@@ -70,7 +75,7 @@ export default function NovaComandaPage() {
         id_funcionario: funcionario.id,
         pin,
         id_cliente: Number(idCliente),
-        id_itens: selecionados,
+        itens: Object.entries(selecionados).map(([id, quantidade]) => ({ id_item: Number(id), quantidade })),
       });
       navigate(`/campo/comandas/${comanda.id}`);
     } catch (err) {
@@ -106,13 +111,13 @@ export default function NovaComandaPage() {
 
       <div className="tag-card stack">
         <div className="spread">
-          <span className="eyebrow">2. Itens ({selecionados.length} selecionados)</span>
+          <span className="eyebrow">2. Itens ({totalUnidades} selecionados)</span>
           <button type="button" className="btn btn-ghost btn-sm" onClick={() => setMostrarNovoItem(true)}>
             + Item novo
           </button>
         </div>
 
-        {itens === null ? <Loader label="Carregando itens" /> : <ItemPicker itens={itens} selecionados={selecionados} onToggle={toggleItem} />}
+        {itens === null ? <Loader label="Carregando itens" /> : <ItemPicker itens={itens} selecionados={selecionados} onChange={alterarItem} />}
       </div>
 
       <button className="btn btn-primary btn-block" disabled={!podeConfirmar} onClick={() => setMostrarPin(true)}>

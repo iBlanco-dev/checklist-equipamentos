@@ -39,17 +39,23 @@ function gerarPdfComanda(comanda, stream) {
   doc.text(`Data: ${new Date(comanda.created_at).toLocaleDateString('pt-BR')}`);
   doc.moveDown();
 
-  doc.fillColor(LARANJA).font('Helvetica-Bold').fontSize(12).text('ITENS');
+  const unidades = comanda.itens.reduce((total, item) => total + (item.quantidade || 1), 0);
+  doc.fillColor(LARANJA).font('Helvetica-Bold').fontSize(12).text(`ITENS (${unidades})`);
   doc.moveDown(0.5);
   doc.fillColor(PRETO).font('Helvetica').fontSize(11);
+  const bottom = () => doc.page.height - doc.page.margins.bottom;
   comanda.itens.forEach((item, i) => {
+    // Quebra antes de desenhar, senão a caixinha fica numa página e o texto na outra
+    if (doc.y + 20 > bottom()) doc.addPage();
     const y = doc.y;
+    const qtd = item.quantidade > 1 ? `${item.quantidade}x ` : '';
     doc.rect(left, y + 1, 9, 9).lineWidth(0.8).stroke(PRETO);
-    doc.text(`${i + 1}. ${item.nome}`, left + 16, y);
+    doc.fillColor(PRETO).text(`${i + 1}. ${qtd}${item.nome}`, left + 16, y);
     doc.moveDown(0.3);
   });
 
   doc.moveDown(4);
+  if (doc.y + 30 > bottom()) doc.addPage();
   const ySig = doc.y;
   doc.moveTo(left, ySig).lineTo(left + 280, ySig).lineWidth(0.8).stroke(PRETO);
   doc.fillColor(CINZA).fontSize(10).text('Assinatura', left, ySig + 6);

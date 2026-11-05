@@ -1,7 +1,8 @@
 import client, { API_ORIGIN } from './client';
 
-export function createComanda({ id_funcionario, pin, id_cliente, id_itens }) {
-  return client.post('/comandas', { id_funcionario, pin, id_cliente, id_itens }).then((res) => res.data);
+// itens: [{ id_item, quantidade }]
+export function createComanda({ id_funcionario, pin, id_cliente, itens }) {
+  return client.post('/comandas', { id_funcionario, pin, id_cliente, itens }).then((res) => res.data);
 }
 
 export function listMinhasComandas(idFuncionario) {

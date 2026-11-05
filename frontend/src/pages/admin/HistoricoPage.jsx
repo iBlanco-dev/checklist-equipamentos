@@ -85,7 +85,7 @@ export default function HistoricoPage() {
       const d = new Date(c.concluded_at);
       return d.getMonth() === hoje.getMonth() && d.getFullYear() === hoje.getFullYear();
     }).length;
-    const itensEmUso = itens.filter((i) => i.em_uso).length;
+    const itensEmUso = itens.reduce((total, i) => total + i.em_uso, 0);
     return { abertas, concluidasNoMes, itensEmUso };
   }, [todasComandas, itens]);
 
@@ -114,7 +114,7 @@ export default function HistoricoPage() {
         <StatCard label="Comandas abertas" value={stats ? stats.abertas : '—'} hint="Em campo agora" icon={ClipboardList} accent />
         <StatCard label="Concluídas no mês" value={stats ? stats.concluidasNoMes : '—'} hint="Itens devolvidos" icon={CheckCircle2} />
         <StatCard label="Clientes ativos" value={clientes.length} hint="Cadastrados" icon={Users} />
-        <StatCard label="Itens em uso" value={stats ? `${stats.itensEmUso}/${itens.length}` : '—'} hint="Do catálogo" icon={Package} />
+        <StatCard label="Itens em uso" value={stats ? `${stats.itensEmUso}/${itens.reduce((total, i) => total + i.quantidade, 0)}` : '—'} hint="Do catálogo" icon={Package} />
       </div>
 
       <div className="card">

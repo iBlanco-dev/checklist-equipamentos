@@ -1,17 +1,38 @@
 const comandaModel = require('../models/comandaModel');
 const { gerarPdfComanda } = require('../utils/pdfGenerator');
 
+// Junta pedidos do mesmo item e valida quantidades. Aceita o formato antigo id_itens (1 unidade cada).
+function normalizarItens({ itens, id_itens }) {
+  const lista = Array.isArray(itens)
+    ? itens
+    : Array.isArray(id_itens)
+      ? id_itens.map((id_item) => ({ id_item, quantidade: 1 }))
+      : [];
+
+  const porItem = new Map();
+  for (const { id_item, quantidade } of lista) {
+    const id = Number(id_item);
+    const qtd = Number(quantidade);
+    if (!Number.isInteger(id) || !Number.isInteger(qtd) || qtd < 1) return null;
+    porItem.set(id, (porItem.get(id) || 0) + qtd);
+  }
+  return [...porItem].map(([id_item, quantidade]) => ({ id_item, quantidade }));
+}
+
 async function create(req, res, next) {
   try {
-    const { id_cliente, id_itens } = req.body;
-    if (!id_cliente || !Array.isArray(id_itens) || id_itens.length === 0) {
-      return res.status(400).json({ error: 'id_cliente e id_itens (lista) são obrigatórios' });
+    const { id_cliente } = req.body;
+    const itens = normalizarItens(req.body);
+    if (!id_cliente || !itens || itens.length === 0) {
+      return res
+        .status(400)
+        .json({ error: 'id_cliente e itens (lista de { id_item, quantidade }) são obrigatórios' });
     }
 
     const comanda = await comandaModel.create({
       id_funcionario: req.funcionario.id,
       id_cliente,
-      id_itens,
+      itens,
     });
     res.status(201).json(comanda);
   } catch (err) {

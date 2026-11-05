@@ -15,9 +15,10 @@ async function findById(id) {
   if (!comanda) return null;
 
   const [itens] = await pool.query(
-    `SELECT i.id, i.nome, i.image FROM comanda_itens ci
+    `SELECT i.id, i.nome, i.image, ci.quantidade FROM comanda_itens ci
      JOIN itens i ON i.id = ci.id_item
-     WHERE ci.id_comanda = ?`,
+     WHERE ci.id_comanda = ?
+     ORDER BY i.nome`,
     [id]
   );
   comanda.itens = itens;
@@ -25,19 +26,13 @@ async function findById(id) {
 }
 
 // Create requer PIN válido (verificado no middleware) e valida RN01 dentro da transação
-async function create({ id_funcionario, id_cliente, id_itens }) {
+// itens: [{ id_item, quantidade }]
+async function create({ id_funcionario, id_cliente, itens }) {
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
 
-    for (const idItem of id_itens) {
-      const emUso = await itemModel.isEmComandaAberta(idItem, connection);
-      if (emUso) {
-        const err = new Error(`Item ${idItem} já está em uma comanda aberta`);
-        err.status = 409;
-        throw err;
-      }
-    }
+    await itemModel.verificarDisponibilidade(itens, connection);
 
     const [result] = await connection.query(
       'INSERT INTO comandas (id_funcionario, id_cliente) VALUES (?, ?)',
@@ -45,8 +40,8 @@ async function create({ id_funcionario, id_cliente, id_itens }) {
     );
     const idComanda = result.insertId;
 
-    const values = id_itens.map((idItem) => [idComanda, idItem]);
-    await connection.query('INSERT INTO comanda_itens (id_comanda, id_item) VALUES ?', [values]);
+    const values = itens.map((item) => [idComanda, item.id_item, item.quantidade]);
+    await connection.query('INSERT INTO comanda_itens (id_comanda, id_item, quantidade) VALUES ?', [values]);
 
     await connection.commit();
     return findById(idComanda);

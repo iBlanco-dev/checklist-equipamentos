@@ -86,14 +86,17 @@ export default function ComandaDetalhePage() {
 
         <hr className="tear" />
 
-        <span className="eyebrow">Itens do checklist ({comanda.itens.length})</span>
+        <span className="eyebrow">
+          Itens do checklist ({comanda.itens.reduce((total, item) => total + item.quantidade, 0)})
+        </span>
         <div className="item-picker">
           {comanda.itens.map((item) => (
             <div key={item.id} className="item-tile" style={{ cursor: 'default' }}>
               <div className="item-tile-thumb">
-                {item.image ? <img src={imageUrl(item.image)} alt="" /> : <span className="mono">{item.nome.slice(0, 2).toUpperCase()}</span>}
+                {item.image ? <img src={imageUrl(item.image)} alt="" /> : <span className="mono">{item.nome.trim().slice(0, 2).toUpperCase()}</span>}
               </div>
               <span className="item-tile-nome">{item.nome}</span>
+              {item.quantidade > 1 && <span className="item-tile-qtd">{item.quantidade} unidades</span>}
             </div>
           ))}
         </div>

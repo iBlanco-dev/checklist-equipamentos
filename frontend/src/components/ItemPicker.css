@@ -73,3 +73,139 @@
   color: var(--text-primary);
   line-height: 1.25;
 }
+
+.item-tile:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.item-tile-disp {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.item-tile-qtd {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* ---------- quantidade ---------- */
+
+.item-stepper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+  cursor: default;
+}
+
+.item-stepper button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.item-stepper button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.item-stepper .mono {
+  min-width: 16px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ---------- busca ---------- */
+
+.item-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.item-search input {
+  width: 100%;
+  min-height: var(--tap-min);
+  background: var(--surface-sunken);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0 42px;
+  color: var(--text-primary);
+  font-size: 1rem; /* >= 16px evita o zoom automático do iOS */
+  outline: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.item-search input:focus {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.item-search-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.item-search-clear {
+  position: absolute;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* ---------- selecionados ---------- */
+
+.item-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.item-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 4px 4px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-ink);
+  border: 1px solid var(--accent);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+}
+
+.item-chip strong {
+  color: var(--accent);
+}
+
+.item-chip button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}

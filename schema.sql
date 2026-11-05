@@ -42,6 +42,8 @@ CREATE TABLE itens (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   nome VARCHAR(150) NOT NULL,
   image VARCHAR(255) NULL,
+  -- Unidades físicas desse item; a comanda aberta reserva parte delas (RN01)
+  quantidade INT UNSIGNED NOT NULL DEFAULT 1,
   status ENUM('ativo', 'inativo') NOT NULL DEFAULT 'ativo',
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_itens_status (status)
@@ -65,6 +67,7 @@ CREATE TABLE comanda_itens (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   id_comanda INT UNSIGNED NOT NULL,
   id_item INT UNSIGNED NOT NULL,
+  quantidade INT UNSIGNED NOT NULL DEFAULT 1,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_comanda_itens_comanda FOREIGN KEY (id_comanda) REFERENCES comandas(id),
   CONSTRAINT fk_comanda_itens_item FOREIGN KEY (id_item) REFERENCES itens(id),
