@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { Sun, Moon, LayoutGrid, Users, IdCard, Package, LogOut, ChevronDown, ShieldCheck } from 'lucide-react';
+import { Sun, Moon, LayoutGrid, Users, IdCard, Package, LogOut, ChevronDown, ShieldCheck, ChartColumn } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import BrandLogo from '../../components/BrandLogo';
@@ -7,6 +7,7 @@ import './AdminLayout.css';
 
 const SECTIONS = [
   { to: '/admin/historico', label: 'Histórico', icon: LayoutGrid },
+  { to: '/admin/relatorios', label: 'Relatórios', icon: ChartColumn },
   { to: '/admin/clientes', label: 'Clientes', icon: Users },
   { to: '/admin/funcionarios', label: 'Funcionários', icon: IdCard },
   { to: '/admin/itens', label: 'Itens', icon: Package },

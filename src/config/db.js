@@ -10,4 +10,9 @@ const pool = mysql.createPool({
   connectionLimit: 10,
 });
 
+// GROUP_CONCAT (lista de itens nos relatórios) corta em 1024 caracteres por padrão
+pool.pool.on('connection', (connection) => {
+  connection.query('SET SESSION group_concat_max_len = 65535');
+});
+
 module.exports = pool;

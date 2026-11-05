@@ -14,6 +14,7 @@ import ClientesPage from './pages/admin/ClientesPage';
 import FuncionariosPage from './pages/admin/FuncionariosPage';
 import ItensPage from './pages/admin/ItensPage';
 import HistoricoPage from './pages/admin/HistoricoPage';
+import RelatoriosPage from './pages/admin/RelatoriosPage';
 import AdministradoresPage from './pages/admin/AdministradoresPage';
 import AlterarSenhaPage from './pages/admin/AlterarSenhaPage';
 
@@ -45,6 +46,7 @@ export default function App() {
               >
                 <Route index element={<HistoricoPage />} />
                 <Route path="historico" element={<HistoricoPage />} />
+                <Route path="relatorios" element={<RelatoriosPage />} />
                 <Route path="clientes" element={<ClientesPage />} />
                 <Route path="funcionarios" element={<FuncionariosPage />} />
                 <Route path="itens" element={<ItensPage />} />
