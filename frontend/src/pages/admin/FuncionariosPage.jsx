@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Pencil, KeyRound, Trash2 } from 'lucide-react';
 import * as funcionariosApi from '../../api/funcionarios';
 import { extractErrorMessage } from '../../api/client';
 import Loader from '../../components/Loader';
@@ -75,23 +76,25 @@ export default function FuncionariosPage() {
 
   return (
     <div className="stack">
-      <div>
-        <h1>Funcionários</h1>
-        <p style={{ marginTop: 4 }}>Equipe que retira e devolve equipamentos em campo.</p>
+      <div className="page-head">
+        <div>
+          <h1>Funcionários</h1>
+          <p>Equipe que retira e devolve equipamentos em campo.</p>
+        </div>
       </div>
 
       <form className="tag-card stack" onSubmit={criar}>
         <span className="eyebrow">Novo funcionário</span>
-        <div className="row" style={{ alignItems: 'flex-end' }}>
-          <div className="field" style={{ flex: 1, minWidth: 160 }}>
+        <div className="form-row">
+          <div className="field">
             <label>Nome</label>
             <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} required />
           </div>
-          <div className="field" style={{ flex: 1, minWidth: 160 }}>
+          <div className="field">
             <label>Cargo</label>
             <input type="text" value={role} onChange={(e) => setRole(e.target.value)} required />
           </div>
-          <div className="field" style={{ width: 110 }}>
+          <div className="field field-narrow">
             <label>PIN (4 dígitos)</label>
             <input
               type="text"
@@ -116,7 +119,7 @@ export default function FuncionariosPage() {
       )}
 
       {funcionarios && funcionarios.length > 0 && (
-        <div className="tag-card" style={{ padding: 0, overflowX: 'auto' }}>
+        <div className="tag-card table-card table-cards">
           <table>
             <thead>
               <tr>
@@ -126,53 +129,46 @@ export default function FuncionariosPage() {
               </tr>
             </thead>
             <tbody>
-              {funcionarios.map((f) =>
-                editando?.id === f.id ? (
-                  <tr key={f.id}>
-                    <td>
-                      <input
-                        type="text"
-                        value={editando.nome}
-                        onChange={(e) => setEditando({ ...editando, nome: e.target.value })}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={editando.role}
-                        onChange={(e) => setEditando({ ...editando, role: e.target.value })}
-                      />
-                    </td>
-                    <td className="row">
-                      <button className="btn btn-primary btn-sm" onClick={salvarEdicao}>
-                        Salvar
-                      </button>
-                      <button className="btn btn-ghost btn-sm" onClick={() => setEditando(null)}>
-                        Cancelar
-                      </button>
-                    </td>
-                  </tr>
-                ) : (
-                  <tr key={f.id}>
-                    <td>{f.nome}</td>
-                    <td>{f.role}</td>
-                    <td className="row">
-                      <button className="btn btn-ghost btn-sm" onClick={() => setEditando(f)}>
-                        Editar
+              {funcionarios.map((f) => (
+                <tr key={f.id}>
+                  <td className="td-strong td-head">{f.nome}</td>
+                  <td data-label="Cargo">{f.role}</td>
+                  <td className="td-actions">
+                    <div className="table-actions">
+                      <button className="btn btn-ghost btn-sm" onClick={() => setEditando({ ...f })}>
+                        <Pencil size={15} /> Editar
                       </button>
                       <button className="btn btn-ghost btn-sm" onClick={() => setResetandoPin(f)}>
-                        Redefinir PIN
+                        <KeyRound size={15} /> PIN
                       </button>
-                      <button className="btn btn-danger btn-sm" onClick={() => remover(f.id)}>
-                        Excluir
+                      <button className="btn btn-danger btn-sm btn-square" aria-label="Excluir" onClick={() => remover(f.id)}>
+                        <Trash2 size={15} />
                       </button>
-                    </td>
-                  </tr>
-                )
-              )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
+      )}
+
+      {editando && (
+        <Modal title="Editar funcionário" onClose={() => setEditando(null)}>
+          <div className="stack">
+            <div className="field">
+              <label>Nome</label>
+              <input type="text" value={editando.nome} onChange={(e) => setEditando({ ...editando, nome: e.target.value })} />
+            </div>
+            <div className="field">
+              <label>Cargo</label>
+              <input type="text" value={editando.role} onChange={(e) => setEditando({ ...editando, role: e.target.value })} />
+            </div>
+            <button className="btn btn-primary btn-block" onClick={salvarEdicao}>
+              Salvar alterações
+            </button>
+          </div>
+        </Modal>
       )}
 
       {resetandoPin && (

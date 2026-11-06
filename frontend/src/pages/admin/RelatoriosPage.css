@@ -412,3 +412,60 @@
     grid-template-columns: 18px minmax(80px, 1fr) minmax(0, 1fr);
   }
 }
+
+.rel-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  /* Período e limite ocupam a largura toda, botões do mesmo tamanho */
+  .rel-head-actions,
+  .rel-card-head .rel-segmented,
+  .rel-head-actions .rel-segmented {
+    width: 100%;
+  }
+
+  .rel-segmented button {
+    flex: 1;
+    min-height: 38px;
+    padding: 0 8px;
+  }
+
+  .rel-head-actions .btn {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .rel-aging-row {
+    padding-right: 0;
+  }
+
+  .rel-aging-title {
+    min-width: 0;
+  }
+
+  .rel-aging-title strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .rel-aging-side {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .rel-export .btn {
+    width: 100%;
+  }
+
+  .rel-tooltip {
+    left: 8px;
+    right: 8px;
+    min-width: 0;
+  }
+}

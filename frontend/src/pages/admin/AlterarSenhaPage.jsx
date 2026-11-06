@@ -36,12 +36,14 @@ export default function AlterarSenhaPage() {
 
   return (
     <div className="stack">
-      <div>
-        <h1>Alterar senha</h1>
-        <p style={{ marginTop: 4 }}>Atualize a senha da sua conta de administrador.</p>
+      <div className="page-head">
+        <div>
+          <h1>Alterar senha</h1>
+          <p>Atualize a senha da sua conta de administrador.</p>
+        </div>
       </div>
 
-      <form className="tag-card stack" onSubmit={submit} style={{ maxWidth: 420 }}>
+      <form className="tag-card stack" onSubmit={submit} style={{ maxWidth: 420, width: '100%' }}>
         <div className="field">
           <label htmlFor="senhaAtual">Senha atual</label>
           <input
@@ -76,7 +78,7 @@ export default function AlterarSenhaPage() {
         </div>
 
         {erro && <div className="error-banner">{erro}</div>}
-        {sucesso && <div className="tag-card">Senha alterada com sucesso.</div>}
+        {sucesso && <div className="success-banner">Senha alterada com sucesso.</div>}
 
         <button className="btn btn-primary" disabled={salvando}>
           {salvando ? 'Salvando...' : 'Salvar nova senha'}

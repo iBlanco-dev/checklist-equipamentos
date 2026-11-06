@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+import { Camera, Trash2 } from 'lucide-react';
 import * as clientesApi from '../../api/clientes';
 import { imageUrl, extractErrorMessage } from '../../api/client';
 import Loader from '../../components/Loader';
 import EmptyState from '../../components/EmptyState';
+import FileField from '../../components/FileField';
 
 export default function ClientesPage() {
   const [clientes, setClientes] = useState(null);
@@ -10,7 +12,6 @@ export default function ClientesPage() {
   const [nome, setNome] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [salvando, setSalvando] = useState(false);
-  const fileInputRef = useRef(null);
   const trocaImagemRefs = useRef({});
 
   const carregar = () => clientesApi.listClientes().then(setClientes).catch((e) => setErro(extractErrorMessage(e)));
@@ -27,7 +28,6 @@ export default function ClientesPage() {
       await clientesApi.createCliente({ nome, imageFile });
       setNome('');
       setImageFile(null);
-      if (fileInputRef.current) fileInputRef.current.value = '';
       await carregar();
     } catch (err) {
       setErro(extractErrorMessage(err));
@@ -60,28 +60,23 @@ export default function ClientesPage() {
 
   return (
     <div className="stack">
-      <div>
-        <h1>Clientes</h1>
-        <p style={{ marginTop: 4 }}>Cadastre e gerencie os clientes que recebem equipamentos.</p>
+      <div className="page-head">
+        <div>
+          <h1>Clientes</h1>
+          <p>Cadastre e gerencie os clientes que recebem equipamentos.</p>
+        </div>
       </div>
 
       <form className="tag-card stack" onSubmit={criar}>
         <span className="eyebrow">Novo cliente</span>
-        <div className="row" style={{ alignItems: 'flex-end' }}>
-          <div className="field" style={{ flex: 1, minWidth: 200 }}>
+        <div className="form-row">
+          <div className="field">
             <label htmlFor="nome-cliente">Nome</label>
             <input id="nome-cliente" type="text" value={nome} onChange={(e) => setNome(e.target.value)} required />
           </div>
-          <div className="field" style={{ flex: 1, minWidth: 200 }}>
+          <div className="field">
             <label>Foto</label>
-            <div className="field-file">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={(e) => setImageFile(e.target.files[0] || null)}
-              />
-            </div>
+            <FileField file={imageFile} onChange={setImageFile} />
           </div>
           <button className="btn btn-primary" disabled={salvando}>
             {salvando ? 'Salvando...' : 'Adicionar'}
@@ -98,45 +93,38 @@ export default function ClientesPage() {
       )}
 
       {clientes && clientes.length > 0 && (
-        <div className="item-picker" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))' }}>
+        <div className="entity-grid">
           {clientes.map((cliente) => (
-            <div key={cliente.id} className="tag-card" style={{ padding: 14, textAlign: 'center' }}>
-              <div
-                style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: 8,
-                  margin: '0 auto 10px',
-                  overflow: 'hidden',
-                  background: 'var(--surface-sunken)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
+            <div key={cliente.id} className="entity-card">
+              <div className="entity-thumb">
                 {cliente.image ? (
-                  <img src={imageUrl(cliente.image)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={imageUrl(cliente.image)} alt="" />
                 ) : (
-                  <span className="mono">{cliente.nome.slice(0, 2).toUpperCase()}</span>
+                  <span className="mono">{cliente.nome.trim().slice(0, 2).toUpperCase()}</span>
                 )}
               </div>
-              <p style={{ color: 'var(--text-primary)', fontWeight: 600, marginBottom: 10 }}>{cliente.nome}</p>
-              <div className="stack" style={{ gap: 6 }}>
-                <input
-                  ref={(el) => (trocaImagemRefs.current[cliente.id] = el)}
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={(e) => trocarImagem(cliente.id, e.target.files[0])}
-                />
+              <div className="entity-body">
+                <span className="entity-title">{cliente.nome}</span>
+              </div>
+              <input
+                ref={(el) => (trocaImagemRefs.current[cliente.id] = el)}
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(e) => trocarImagem(cliente.id, e.target.files[0])}
+              />
+              <div className="entity-actions">
                 <button
                   className="btn btn-ghost btn-sm"
+                  aria-label="Trocar foto"
                   onClick={() => trocaImagemRefs.current[cliente.id]?.click()}
                 >
-                  Trocar foto
+                  <Camera size={16} />
+                  <span className="btn-label">Foto</span>
                 </button>
-                <button className="btn btn-danger btn-sm" onClick={() => remover(cliente.id)}>
-                  Excluir
+                <button className="btn btn-danger btn-sm" aria-label="Excluir" onClick={() => remover(cliente.id)}>
+                  <Trash2 size={16} />
+                  <span className="btn-label">Excluir</span>
                 </button>
               </div>
             </div>

@@ -88,7 +88,7 @@ function AbertasCard({ abertas }) {
 
   return (
     <div className="card stack rel-card">
-      <div className="spread">
+      <div className="spread rel-card-head">
         <div>
           <h3>Comandas abertas há muito tempo</h3>
           <p className="rel-sub">
@@ -296,12 +296,12 @@ export default function RelatoriosPage() {
 
   return (
     <div className="stack">
-      <div className="spread">
+      <div className="page-head">
         <div>
           <h1>Relatórios</h1>
-          <p style={{ marginTop: 4 }}>Uso dos equipamentos, devoluções pendentes e exportação.</p>
+          <p>Uso dos equipamentos, devoluções pendentes e exportação.</p>
         </div>
-        <div className="row">
+        <div className="rel-head-actions">
           <div className="rel-segmented" role="group" aria-label="Período">
             {PERIODOS.map((p) => (
               <button key={p.dias} type="button" className={dias === p.dias ? 'active' : ''} onClick={() => setDias(p.dias)}>

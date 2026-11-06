@@ -1,9 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
 import * as itensApi from '../../api/itens';
 import { imageUrl, extractErrorMessage } from '../../api/client';
 import Loader from '../../components/Loader';
 import EmptyState from '../../components/EmptyState';
 import Modal from '../../components/Modal';
+import ItemIcon from '../../components/ItemIcon';
+import FileField from '../../components/FileField';
 
 export default function ItensPage() {
   const [itens, setItens] = useState(null);
@@ -12,7 +15,6 @@ export default function ItensPage() {
   const [quantidade, setQuantidade] = useState('1');
   const [imageFile, setImageFile] = useState(null);
   const [salvando, setSalvando] = useState(false);
-  const fileInputRef = useRef(null);
   const [editando, setEditando] = useState(null);
   const [editandoNome, setEditandoNome] = useState('');
   const [editandoQuantidade, setEditandoQuantidade] = useState('1');
@@ -33,7 +35,6 @@ export default function ItensPage() {
       setNome('');
       setQuantidade('1');
       setImageFile(null);
-      if (fileInputRef.current) fileInputRef.current.value = '';
       await carregar();
     } catch (err) {
       setErro(extractErrorMessage(err));
@@ -77,19 +78,21 @@ export default function ItensPage() {
 
   return (
     <div className="stack">
-      <div>
-        <h1>Itens</h1>
-        <p style={{ marginTop: 4 }}>Catálogo de equipamentos disponíveis para as comandas.</p>
+      <div className="page-head">
+        <div>
+          <h1>Itens</h1>
+          <p>Catálogo de equipamentos disponíveis para as comandas.</p>
+        </div>
       </div>
 
       <form className="tag-card stack" onSubmit={criar}>
         <span className="eyebrow">Novo item</span>
-        <div className="row" style={{ alignItems: 'flex-end' }}>
-          <div className="field" style={{ flex: 1, minWidth: 200 }}>
+        <div className="form-row">
+          <div className="field">
             <label>Nome</label>
             <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} required />
           </div>
-          <div className="field" style={{ width: 110 }}>
+          <div className="field field-narrow">
             <label>Quantidade</label>
             <input
               type="number"
@@ -101,16 +104,9 @@ export default function ItensPage() {
               required
             />
           </div>
-          <div className="field" style={{ flex: 1, minWidth: 200 }}>
+          <div className="field">
             <label>Foto</label>
-            <div className="field-file">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={(e) => setImageFile(e.target.files[0] || null)}
-              />
-            </div>
+            <FileField file={imageFile} onChange={setImageFile} />
           </div>
           <button className="btn btn-primary" disabled={salvando}>
             {salvando ? 'Salvando...' : 'Adicionar'}
@@ -124,43 +120,29 @@ export default function ItensPage() {
       {itens && itens.length === 0 && <EmptyState title="Nenhum item cadastrado" />}
 
       {itens && itens.length > 0 && (
-        <div className="item-picker" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))' }}>
+        <div className="entity-grid">
           {itens.map((item) => (
-            <div key={item.id} className="tag-card" style={{ padding: 14, textAlign: 'center' }}>
-              <div
-                style={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: 8,
-                  margin: '0 auto 8px',
-                  overflow: 'hidden',
-                  background: 'var(--surface-sunken)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                {item.image ? (
-                  <img src={imageUrl(item.image)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                ) : (
-                  <span className="mono">{item.nome.slice(0, 2).toUpperCase()}</span>
-                )}
+            <div key={item.id} className="entity-card">
+              <div className="entity-thumb">
+                {item.image ? <img src={imageUrl(item.image)} alt="" /> : <ItemIcon nome={item.nome} />}
               </div>
-              <p style={{ color: 'var(--text-primary)', fontWeight: 600, marginBottom: 4 }}>{item.nome}</p>
-              <span className={`stamp ${item.disponivel === 0 ? 'stamp-aberta' : 'stamp-concluida'}`} style={{ fontSize: '0.68rem' }}>
-                {item.disponivel === 0 ? 'Em uso' : 'Disponível'}
-              </span>
-              <p className="mono" style={{ fontSize: '0.72rem', marginTop: 6 }}>
-                {item.quantidade > 1 || item.em_uso > 0
-                  ? `${item.disponivel} de ${item.quantidade} livres`
-                  : '1 unidade'}
-              </p>
-              <div className="stack" style={{ gap: 6, marginTop: 10 }}>
-                <button className="btn btn-ghost btn-sm" onClick={() => abrirEdicao(item)}>
-                  Editar
+              <div className="entity-body">
+                <span className="entity-title">{item.nome}</span>
+                <span className={`stamp ${item.disponivel === 0 ? 'stamp-aberta' : 'stamp-concluida'}`} style={{ fontSize: '0.68rem' }}>
+                  {item.disponivel === 0 ? 'Em uso' : 'Disponível'}
+                </span>
+                <span className="entity-meta mono">
+                  {item.quantidade > 1 || item.em_uso > 0 ? `${item.disponivel} de ${item.quantidade} livres` : '1 unidade'}
+                </span>
+              </div>
+              <div className="entity-actions">
+                <button className="btn btn-ghost btn-sm" aria-label="Editar" onClick={() => abrirEdicao(item)}>
+                  <Pencil size={16} />
+                  <span className="btn-label">Editar</span>
                 </button>
-                <button className="btn btn-danger btn-sm" onClick={() => remover(item.id)}>
-                  Excluir
+                <button className="btn btn-danger btn-sm" aria-label="Excluir" onClick={() => remover(item.id)}>
+                  <Trash2 size={16} />
+                  <span className="btn-label">Excluir</span>
                 </button>
               </div>
             </div>
@@ -191,9 +173,7 @@ export default function ItensPage() {
             </div>
             <div className="field">
               <label>Nova foto (opcional)</label>
-              <div className="field-file">
-                <input type="file" accept="image/*" onChange={(e) => setEditandoImagem(e.target.files[0] || null)} />
-              </div>
+              <FileField file={editandoImagem} onChange={setEditandoImagem} />
             </div>
             <button className="btn btn-primary btn-block" onClick={salvarEdicao}>
               Salvar alterações

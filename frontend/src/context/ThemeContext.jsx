@@ -8,6 +8,8 @@ export function ThemeProvider({ children }) {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
+    // Cor da barra do navegador/sistema acompanha o fundo da página
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#000000' : '#f5f5f5');
   }, [theme]);
 
   const value = useMemo(

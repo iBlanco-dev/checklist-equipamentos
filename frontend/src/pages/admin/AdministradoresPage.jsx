@@ -41,23 +41,25 @@ export default function AdministradoresPage() {
 
   return (
     <div className="stack">
-      <div>
-        <h1>Administradores</h1>
-        <p style={{ marginTop: 4 }}>Contas com acesso total ao painel.</p>
+      <div className="page-head">
+        <div>
+          <h1>Administradores</h1>
+          <p>Contas com acesso total ao painel.</p>
+        </div>
       </div>
 
       <form className="tag-card stack" onSubmit={criar}>
         <span className="eyebrow">Novo administrador</span>
-        <div className="row" style={{ alignItems: 'flex-end' }}>
-          <div className="field" style={{ flex: 1, minWidth: 160 }}>
+        <div className="form-row">
+          <div className="field">
             <label>Nome</label>
             <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} required />
           </div>
-          <div className="field" style={{ flex: 1, minWidth: 200 }}>
+          <div className="field">
             <label>Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input type="email" autoCapitalize="none" autoCorrect="off" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
-          <div className="field" style={{ flex: 1, minWidth: 160 }}>
+          <div className="field">
             <label>Senha</label>
             <input
               type="password"
@@ -81,7 +83,7 @@ export default function AdministradoresPage() {
       )}
 
       {administradores && administradores.length > 0 && (
-        <div className="tag-card" style={{ padding: 0, overflowX: 'auto' }}>
+        <div className="tag-card table-card table-cards">
           <table>
             <thead>
               <tr>
@@ -92,8 +94,8 @@ export default function AdministradoresPage() {
             <tbody>
               {administradores.map((a) => (
                 <tr key={a.id}>
-                  <td>{a.nome}</td>
-                  <td>{a.email}</td>
+                  <td className="td-strong td-head">{a.nome}</td>
+                  <td className="td-email" data-label="Email">{a.email}</td>
                 </tr>
               ))}
             </tbody>

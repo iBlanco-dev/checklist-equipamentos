@@ -105,9 +105,11 @@ export default function HistoricoPage() {
 
   return (
     <div className="stack">
-      <div>
-        <h1>Histórico</h1>
-        <p style={{ marginTop: 4 }}>Acompanhe as comandas de equipamentos em campo.</p>
+      <div className="page-head">
+        <div>
+          <h1>Histórico</h1>
+          <p>Acompanhe as comandas de equipamentos em campo.</p>
+        </div>
       </div>
 
       <div className="stat-grid">
@@ -127,8 +129,8 @@ export default function HistoricoPage() {
         {chartData.length > 0 ? <MiniBarChart data={chartData} /> : <Loader label="Carregando gráfico" />}
       </div>
 
-      <div className="card row" style={{ alignItems: 'flex-end' }}>
-        <div className="field" style={{ flex: '1 1 220px' }}>
+      <div className="card filters">
+        <div className="field filters-search">
           <label>Buscar</label>
           <div style={{ position: 'relative' }}>
             <Search size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-tertiary)' }} />
@@ -141,7 +143,7 @@ export default function HistoricoPage() {
             />
           </div>
         </div>
-        <div className="field" style={{ minWidth: 180 }}>
+        <div className="field">
           <label>Cliente</label>
           <select value={filtroCliente} onChange={(e) => setFiltroCliente(e.target.value)}>
             <option value="">Todos</option>
@@ -152,7 +154,7 @@ export default function HistoricoPage() {
             ))}
           </select>
         </div>
-        <div className="field" style={{ minWidth: 180 }}>
+        <div className="field">
           <label>Funcionário</label>
           <select value={filtroFuncionario} onChange={(e) => setFiltroFuncionario(e.target.value)}>
             <option value="">Todos</option>
@@ -170,7 +172,7 @@ export default function HistoricoPage() {
       {comandasFiltradas && comandasFiltradas.length === 0 && <EmptyState title="Nenhuma comanda encontrada" />}
 
       {comandasFiltradas && comandasFiltradas.length > 0 && (
-        <div className="card" style={{ padding: 0, overflowX: 'auto' }}>
+        <div className="card table-card table-cards">
           <table>
             <thead>
               <tr>
@@ -186,22 +188,24 @@ export default function HistoricoPage() {
             <tbody>
               {comandasFiltradas.map((c) => (
                 <tr key={c.id}>
-                  <td className="mono">#{c.id}</td>
-                  <td style={{ fontWeight: 600 }}>{c.cliente_nome}</td>
-                  <td>{c.funcionario_nome}</td>
-                  <td>
+                  <td className="mono td-inline td-id">#{c.id}</td>
+                  <td className="td-strong td-head td-inline td-grow">{c.cliente_nome}</td>
+                  <td data-label="Funcionário">{c.funcionario_nome}</td>
+                  <td className="td-inline td-status">
                     <StatusStamp status={c.status} />
                   </td>
-                  <td className="mono">{formatarData(c.created_at)}</td>
-                  <td className="mono">{formatarData(c.concluded_at)}</td>
-                  <td>
-                    <div className="row" style={{ justifyContent: 'flex-end' }}>
+                  <td className="mono" data-label="Criada em">{formatarData(c.created_at)}</td>
+                  <td className="mono" data-label="Concluída em">{formatarData(c.concluded_at)}</td>
+                  <td className="td-actions">
+                    <div className="table-actions">
                       <a className="btn btn-ghost btn-icon" href={comandasApi.pdfUrl(c.id)} target="_blank" rel="noreferrer" title="Baixar PDF">
                         <Download size={16} />
+                        <span className="btn-label">PDF</span>
                       </a>
                       {c.status === 'aberta' && (
                         <button className="btn btn-danger btn-icon" onClick={() => cancelar(c.id)} title="Cancelar">
                           <XCircle size={16} />
+                          <span className="btn-label">Cancelar</span>
                         </button>
                       )}
                     </div>
