@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './PinPad.css';
 
 const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'back'];
@@ -19,6 +19,27 @@ export default function PinPad({ nomeFuncionario, onConfirm, onCancel, loading, 
   const confirmar = () => {
     if (pin.length === 4) onConfirm(pin);
   };
+
+  // No desktop o PIN também pode ser digitado pelo teclado (inclusive o numérico)
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      if (/^[0-9]$/.test(e.key)) {
+        e.preventDefault();
+        press(e.key);
+      } else if (e.key === 'Backspace') {
+        e.preventDefault();
+        press('back');
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (!loading) confirmar();
+      } else if (e.key === 'Escape') {
+        if (!loading) onCancel();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  });
 
   return (
     <div className="pinpad stack">
