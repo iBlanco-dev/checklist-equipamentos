@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Search, X, Minus, Plus } from 'lucide-react';
 import { imageUrl } from '../api/client';
+import ItemIcon from './ItemIcon';
 import './ItemPicker.css';
 
 // "Câmera  Sony" -> "camera sony": busca ignora acento, caixa e espaços extras
@@ -106,7 +107,7 @@ export default function ItemPicker({ itens, selecionados, onChange }) {
                   {item.image ? (
                     <img src={imageUrl(item.image)} alt="" />
                   ) : (
-                    <span className="mono">{item.nome.trim().slice(0, 2).toUpperCase()}</span>
+                    <ItemIcon nome={item.nome} />
                   )}
                 </div>
                 <span className="item-tile-nome">{item.nome}</span>

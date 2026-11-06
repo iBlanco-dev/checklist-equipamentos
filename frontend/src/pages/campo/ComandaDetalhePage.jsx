@@ -5,6 +5,7 @@ import { imageUrl, extractErrorMessage } from '../../api/client';
 import { useFuncionario } from '../../context/FuncionarioContext';
 import Loader from '../../components/Loader';
 import StatusStamp from '../../components/StatusStamp';
+import ItemIcon from '../../components/ItemIcon';
 import Modal from '../../components/Modal';
 import PinPad from '../../components/PinPad';
 
@@ -93,7 +94,7 @@ export default function ComandaDetalhePage() {
           {comanda.itens.map((item) => (
             <div key={item.id} className="item-tile" style={{ cursor: 'default' }}>
               <div className="item-tile-thumb">
-                {item.image ? <img src={imageUrl(item.image)} alt="" /> : <span className="mono">{item.nome.trim().slice(0, 2).toUpperCase()}</span>}
+                {item.image ? <img src={imageUrl(item.image)} alt="" /> : <ItemIcon nome={item.nome} />}
               </div>
               <span className="item-tile-nome">{item.nome}</span>
               {item.quantidade > 1 && <span className="item-tile-qtd">{item.quantidade} unidades</span>}
