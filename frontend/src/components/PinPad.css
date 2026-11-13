@@ -50,3 +50,30 @@
 .pinpad-key:disabled {
   opacity: 0.4;
 }
+
+.pinpad-dica {
+  margin-top: -6px;
+  color: var(--text-tertiary);
+  font-size: 0.8rem;
+}
+
+@media (hover: none) {
+  .pinpad-dica {
+    display: none;
+  }
+}
+
+/* PIN recusado: os pontos tremem antes de limpar */
+.pinpad-dots.erro {
+  animation: pinpad-tremer 0.4s ease;
+}
+
+.pinpad-dots.erro .pinpad-dot {
+  border-color: var(--danger);
+}
+
+@keyframes pinpad-tremer {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
