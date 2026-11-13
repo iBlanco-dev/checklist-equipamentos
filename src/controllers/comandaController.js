@@ -40,20 +40,25 @@ async function create(req, res, next) {
   }
 }
 
-// Leitura livre por nome, sem PIN (ver "Estratégia de autenticação")
+// Comandas abertas do funcionário da sessão (PIN digitado ao selecionar o perfil)
 async function listMinhas(req, res, next) {
   try {
-    const { id_funcionario } = req.query;
-    if (!id_funcionario) {
-      return res.status(400).json({ error: 'id_funcionario é obrigatório' });
-    }
-    res.json(await comandaModel.listAbertasPorFuncionario(id_funcionario));
+    res.json(await comandaModel.listAbertasPorFuncionario(req.funcionario.id));
   } catch (err) {
     next(err);
   }
 }
 
-// Admin vê qualquer comanda; funcionário só a própria (passando ?id_funcionario=)
+// Resumo para toda a equipe: o que está fora agora, com quem e em qual cliente
+async function listAbertas(req, res, next) {
+  try {
+    res.json(await comandaModel.listAbertas());
+  } catch (err) {
+    next(err);
+  }
+}
+
+// Admin vê qualquer comanda; funcionário só a própria
 async function getOne(req, res, next) {
   try {
     const comanda = await comandaModel.findById(req.params.id);
@@ -62,8 +67,7 @@ async function getOne(req, res, next) {
     }
 
     const isAdmin = Boolean(req.admin);
-    const idFuncionario = req.query.id_funcionario;
-    const isDono = idFuncionario && Number(idFuncionario) === comanda.id_funcionario;
+    const isDono = req.funcionario && req.funcionario.id === comanda.id_funcionario;
 
     if (!isAdmin && !isDono) {
       return res.status(403).json({ error: 'Sem permissão para ver esta comanda' });
@@ -127,4 +131,4 @@ async function gerarPdf(req, res, next) {
   }
 }
 
-module.exports = { create, getOne, listMinhas, listHistorico, concluir, cancelar, gerarPdf };
+module.exports = { create, getOne, listMinhas, listAbertas, listHistorico, concluir, cancelar, gerarPdf };

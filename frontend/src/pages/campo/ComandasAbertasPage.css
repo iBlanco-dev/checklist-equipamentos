@@ -1,0 +1,183 @@
+.abertas-segmented {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 3px;
+  gap: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+}
+
+.abertas-segmented button {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  min-height: 38px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.abertas-segmented button.active {
+  background: var(--surface);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------- por comanda ---------- */
+
+.abertas-card {
+  color: inherit;
+}
+
+.abertas-cliente {
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-top: 4px;
+}
+
+.abertas-meta {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.abertas-meta strong {
+  color: var(--text-primary);
+}
+
+.abertas-minha {
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-ink);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.abertas-tempo {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.abertas-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.abertas-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 4px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+}
+
+.abertas-chip strong {
+  color: var(--accent);
+}
+
+.abertas-thumb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--surface-sunken);
+  color: var(--text-secondary);
+}
+
+.abertas-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.abertas-thumb svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ---------- por item ---------- */
+
+.abertas-itens {
+  padding: 0;
+}
+
+.abertas-item-row {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.abertas-item-row:last-child {
+  border-bottom: none;
+}
+
+.abertas-item-row .abertas-thumb {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+}
+
+.abertas-item-row .abertas-thumb svg {
+  width: 22px;
+  height: 22px;
+}
+
+.abertas-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.abertas-item-info > .spread strong {
+  color: var(--text-primary);
+}
+
+.abertas-item-total {
+  flex-shrink: 0;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.abertas-saidas {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.abertas-saidas strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.abertas-saida-tempo {
+  color: var(--text-tertiary);
+}

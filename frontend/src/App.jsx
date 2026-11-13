@@ -20,6 +20,7 @@ import AlterarSenhaPage from './pages/admin/AlterarSenhaPage';
 
 import CampoGate from './pages/campo/CampoGate';
 import MinhasComandasPage from './pages/campo/MinhasComandasPage';
+import ComandasAbertasPage from './pages/campo/ComandasAbertasPage';
 import NovaComandaPage from './pages/campo/NovaComandaPage';
 import ComandaDetalhePage from './pages/campo/ComandaDetalhePage';
 import AlterarPinPage from './pages/campo/AlterarPinPage';
@@ -56,6 +57,7 @@ export default function App() {
 
               <Route path="/campo" element={<CampoGate />}>
                 <Route index element={<MinhasComandasPage />} />
+                <Route path="abertas" element={<ComandasAbertasPage />} />
                 <Route path="nova" element={<NovaComandaPage />} />
                 <Route path="comandas/:id" element={<ComandaDetalhePage />} />
                 <Route path="alterar-pin" element={<AlterarPinPage />} />

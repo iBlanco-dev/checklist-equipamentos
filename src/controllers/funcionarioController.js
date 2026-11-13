@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const funcionarioModel = require('../models/funcionarioModel');
+const { assinarSessaoFuncionario } = require('../middlewares/auth');
 
 function isPinValido(pin) {
   return /^\d{4}$/.test(String(pin || ''));
@@ -49,6 +50,33 @@ async function resetPin(req, res, next) {
   }
 }
 
+// Ao tocar no próprio perfil em campo: PIN válido abre uma sessão (token) para ver itens e comandas
+async function entrar(req, res, next) {
+  try {
+    const { pin } = req.body;
+    if (!isPinValido(pin)) {
+      return res.status(400).json({ error: 'pin deve ter 4 dígitos' });
+    }
+
+    const funcionario = await funcionarioModel.findAtivoComPin(req.params.id);
+    if (!funcionario) {
+      return res.status(404).json({ error: 'Funcionário não encontrado' });
+    }
+
+    const valido = await bcrypt.compare(String(pin), funcionario.pin_hash);
+    if (!valido) {
+      return res.status(401).json({ error: 'PIN inválido' });
+    }
+
+    res.json({
+      token: assinarSessaoFuncionario(funcionario),
+      funcionario: { id: funcionario.id, nome: funcionario.nome },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 // Autoatendimento: o próprio funcionário troca o PIN informando o atual, sem precisar do admin.
 async function changeOwnPin(req, res, next) {
   try {
@@ -82,4 +110,4 @@ async function remove(req, res, next) {
   }
 }
 
-module.exports = { list, create, update, resetPin, changeOwnPin, remove };
+module.exports = { list, create, update, resetPin, entrar, changeOwnPin, remove };

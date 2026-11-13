@@ -5,16 +5,18 @@ export function createComanda({ id_funcionario, pin, id_cliente, itens }) {
   return client.post('/comandas', { id_funcionario, pin, id_cliente, itens }).then((res) => res.data);
 }
 
-export function listMinhasComandas(idFuncionario) {
-  return client
-    .get('/comandas/minhas', { params: { id_funcionario: idFuncionario } })
-    .then((res) => res.data);
+// Funcionário vem da sessão de campo (header X-Funcionario-Token)
+export function listMinhasComandas() {
+  return client.get('/comandas/minhas').then((res) => res.data);
 }
 
-export function getComanda(id, idFuncionario) {
-  return client
-    .get(`/comandas/${id}`, { params: idFuncionario ? { id_funcionario: idFuncionario } : {} })
-    .then((res) => res.data);
+// Todas as comandas abertas, com itens, responsável e cliente
+export function listComandasAbertas() {
+  return client.get('/comandas/abertas').then((res) => res.data);
+}
+
+export function getComanda(id) {
+  return client.get(`/comandas/${id}`).then((res) => res.data);
 }
 
 export function listHistorico({ id_cliente, id_funcionario } = {}) {

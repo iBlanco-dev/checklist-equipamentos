@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as comandasApi from '../../api/comandas';
-import { useFuncionario } from '../../context/FuncionarioContext';
 import { extractErrorMessage } from '../../api/client';
 import Loader from '../../components/Loader';
 import EmptyState from '../../components/EmptyState';
@@ -12,16 +11,15 @@ function formatarData(iso) {
 }
 
 export default function MinhasComandasPage() {
-  const { funcionario } = useFuncionario();
   const [comandas, setComandas] = useState(null);
   const [erro, setErro] = useState(null);
 
   useEffect(() => {
     comandasApi
-      .listMinhasComandas(funcionario.id)
+      .listMinhasComandas()
       .then(setComandas)
       .catch((e) => setErro(extractErrorMessage(e)));
-  }, [funcionario.id]);
+  }, []);
 
   return (
     <div className="stack">

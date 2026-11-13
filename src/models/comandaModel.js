@@ -96,6 +96,34 @@ async function listAbertasPorFuncionario(idFuncionario) {
   return rows;
 }
 
+// Todas as comandas abertas, da mais antiga pra mais nova, com os itens de cada uma (aba "Abertas" em campo)
+async function listAbertas() {
+  const [comandas] = await pool.query(
+    `SELECT c.id, c.created_at, c.id_funcionario, f.nome AS funcionario_nome,
+            c.id_cliente, cl.nome AS cliente_nome, cl.image AS cliente_image
+     FROM comandas c
+     JOIN clientes cl ON cl.id = c.id_cliente
+     JOIN funcionarios f ON f.id = c.id_funcionario
+     WHERE c.status = 'aberta'
+     ORDER BY c.created_at`
+  );
+  if (comandas.length === 0) return [];
+
+  const [itens] = await pool.query(
+    `SELECT ci.id_comanda, i.id, i.nome, i.image, ci.quantidade
+     FROM comanda_itens ci
+     JOIN itens i ON i.id = ci.id_item
+     WHERE ci.id_comanda IN (?)
+     ORDER BY i.nome`,
+    [comandas.map((c) => c.id)]
+  );
+
+  return comandas.map((c) => ({
+    ...c,
+    itens: itens.filter((i) => i.id_comanda === c.id).map(({ id_comanda, ...item }) => item),
+  }));
+}
+
 async function concluir(id) {
   await pool.query(
     "UPDATE comandas SET status = 'concluida', concluded_at = NOW() WHERE id = ? AND status = 'aberta'",
@@ -113,6 +141,7 @@ module.exports = {
   create,
   listHistorico,
   listAbertasPorFuncionario,
+  listAbertas,
   concluir,
   cancelar,
 };

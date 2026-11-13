@@ -27,6 +27,9 @@ export default function CampoGate() {
           <NavLink to="/campo" end className={({ isActive }) => `pill-nav-item ${isActive ? 'active' : ''}`}>
             Minhas comandas
           </NavLink>
+          <NavLink to="/campo/abertas" className={({ isActive }) => `pill-nav-item ${isActive ? 'active' : ''}`}>
+            Abertas
+          </NavLink>
           <NavLink to="/campo/nova" className={({ isActive }) => `pill-nav-item ${isActive ? 'active' : ''}`}>
             Nova comanda
           </NavLink>

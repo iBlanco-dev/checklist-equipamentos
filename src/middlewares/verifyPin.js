@@ -20,6 +20,11 @@ async function requireFuncionarioPin(req, res, next) {
       return res.status(401).json({ error: 'PIN inválido' });
     }
 
+    // O PIN tem que ser do mesmo funcionário da sessão aberta no aparelho
+    if (req.funcionario && req.funcionario.id !== funcionario.id) {
+      return res.status(403).json({ error: 'O PIN informado não é do funcionário desta sessão' });
+    }
+
     req.funcionario = { id: funcionario.id, nome: funcionario.nome };
     next();
   } catch (err) {

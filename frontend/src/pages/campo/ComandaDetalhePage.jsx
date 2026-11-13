@@ -25,7 +25,7 @@ export default function ComandaDetalhePage() {
 
   const carregar = () =>
     comandasApi
-      .getComanda(id, funcionario.id)
+      .getComanda(id)
       .then(setComanda)
       .catch((e) => setErro(extractErrorMessage(e)));
 

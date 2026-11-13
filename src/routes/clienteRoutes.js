@@ -1,11 +1,11 @@
 const express = require('express');
-const { requireAdmin } = require('../middlewares/auth');
+const { requireAdmin, requireAdminOuFuncionario } = require('../middlewares/auth');
 const upload = require('../middlewares/upload');
 const controller = require('../controllers/clienteController');
 
 const router = express.Router();
 
-router.get('/', controller.list);
+router.get('/', requireAdminOuFuncionario, controller.list);
 router.post('/', requireAdmin, upload.single('image'), controller.create);
 router.patch('/:id/image', requireAdmin, upload.single('image'), controller.updateImage);
 router.delete('/:id', requireAdmin, controller.remove);
